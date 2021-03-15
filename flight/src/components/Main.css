@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.item {
+  flex-grow: 1;
+}
+.curr {
+  flex-shrink: 1;
+}
