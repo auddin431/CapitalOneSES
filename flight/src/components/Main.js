@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import Info from "./Info";
 import Select from "react-select";
 import DatePicker from "react-date-picker";
@@ -29,10 +29,6 @@ const Main = () => {
       useQueryString: true,
     },
   };
-  const options = [
-    { value: "USD", label: "USD" },
-    { value: "GBP", label: "GBP" },
-  ];
   const [origin, setOrigin] = useState([]);
   const [destination, setDestination] = useState([]);
   const [routes, setRoutes] = useState([]);
@@ -41,6 +37,7 @@ const Main = () => {
   const [airportOrigin, setAirportOrigin] = useState("");
   const [airportDestination, setAirportDestination] = useState("");
   const [currency, setCurrency] = useState("USD");
+  const [currencies, setCurrencies] = useState([]);
   const [showOrigins, setShowOrigins] = useState(false);
   const [showDestinations, setShowDestinations] = useState(false);
   const [originDate, setOriginDate] = useState(new Date());
@@ -48,7 +45,19 @@ const Main = () => {
   const [ibpDate, setIbpDate] = useState("");
   const [slider, setSlider] = useState(false);
   const [destDate, setDestDate] = useState(new Date());
-  // const inboundpartialdate = "";
+
+  useEffect(async () => {
+    let response = await fetch(
+      "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/currencies",
+      reqOptions
+    );
+    response = await response.json();
+    const newArray = response.Currencies.map((item) => {
+      return { value: item.Code, label: item.Code };
+    });
+    setCurrencies(newArray);
+  }, []);
+
   const handleChangeOrigin = (inputValue) => {
     const fetchOrigin = async () => {
       if (inputValue !== "") {
@@ -143,7 +152,7 @@ const Main = () => {
           Destination
         </Select>
         <Select
-          options={options}
+          options={currencies}
           onChange={(inputValue) => setCurrency(inputValue.value)}
           isSearchable={false}
           defaultValue={currency}
