@@ -63,68 +63,94 @@ const Main = () => {
 
   useEffect(() => {
     const fetchCurrencies = async () => {
-      let response = await fetch(
-        "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/currencies",
-        reqOptions
-      );
-      response = await response.json();
-      const newArray = response.Currencies.map((item) => {
-        return { value: item.Code, label: item.Code };
-      });
-      setCurrencies(newArray);
+      try {
+        let response = await fetch(
+          "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/currencies",
+          reqOptions
+        );
+        response = await response.json();
+        const newArray = response.Currencies.map((item) => {
+          return { value: item.Code, label: item.Code };
+        });
+        setCurrencies(newArray);
+      } catch (error) {
+        console.log(error);
+        setCurrencies([{ value: "USD", label: "USD" }]);
+      }
     };
     fetchCurrencies();
   }, []);
 
   const handleChangeOrigin = (inputValue) => {
     const fetchOrigin = async () => {
-      if (inputValue !== "") {
-        let response = await fetch(
-          `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/${currency}/en-US/?` +
-            new URLSearchParams({ query: inputValue }),
-          reqOptions
-        );
-        response = await response.json();
-        const newArray = response.Places.map((item) => {
-          return { value: item.PlaceId, label: item.PlaceName };
-        });
-        setOrigin(newArray);
+      try {
+        if (inputValue !== "") {
+          let response = await fetch(
+            `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/${currency}/en-US/?` +
+              new URLSearchParams({ query: inputValue }),
+            reqOptions
+          );
+          response = await response.json();
+          const newArray = response.Places.map((item) => {
+            return { value: item.PlaceId, label: item.PlaceName };
+          });
+          setOrigin(newArray);
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
     fetchOrigin();
   };
   const handleChangeDestination = (inputValue) => {
     const fetchDestination = async () => {
-      if (inputValue !== "") {
-        let response = await fetch(
-          `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/${currency}/en-US/?` +
-            new URLSearchParams({ query: inputValue }),
-          reqOptions
-        );
-        response = await response.json();
-        const newArray = response.Places.map((item) => {
-          return { value: item.PlaceId, label: item.PlaceName };
-        });
-        setDestination(newArray);
+      try {
+        if (inputValue !== "") {
+          let response = await fetch(
+            `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/${currency}/en-US/?` +
+              new URLSearchParams({ query: inputValue }),
+            reqOptions
+          );
+          response = await response.json();
+          const newArray = response.Places.map((item) => {
+            return { value: item.PlaceId, label: item.PlaceName };
+          });
+          setDestination(newArray);
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
     fetchDestination();
   };
 
-  const handleOnClick = async () => {
-    let response = await fetch(
-      `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/${currency}/en-US/${airportOrigin}/${airportDestination}/${obpDate}/${ibpDate}`,
-      reqOptions
-    );
-    response = await response.json();
-    setRouteResponse(response);
-    console.log(response);
-    setShowRoutes(true);
-    if (response.Quotes.length < 1) {
-      setAreRoutes(false);
-    } else {
-      setAreRoutes(true);
-    }
+  const handleOnClick = () => {
+    const fetchRoute = async () => {
+      try {
+        let response = await fetch(
+          `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/${currency}/en-US/${airportOrigin}/${airportDestination}/${obpDate}/${ibpDate}`,
+          reqOptions
+        );
+        response = await response.json();
+        console.log(response);
+        if (response.message) {
+          console.log("Burgertown");
+          throw new Error("No Response");
+        }
+        setRouteResponse(response);
+        setShowRoutes(true);
+        if (response.Quotes.length < 1) {
+          setAreRoutes(false);
+        } else {
+          setAreRoutes(true);
+        }
+      } catch (error) {
+        console.log(error);
+        setAreRoutes(false);
+        setShowRoutes(false);
+      }
+    };
+    fetchRoute();
   };
 
   const handleOriginDateChange = (returnValue) => {
