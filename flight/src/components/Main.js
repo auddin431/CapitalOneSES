@@ -5,21 +5,16 @@ import DatePicker from "react-date-picker";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import "./Main.css";
 
-const RouteAvailability = (props) => {
-  console.log("I am rendered");
-  return (
-    <>
-      {props.areRoutes ? (
-        <></>
-      ) : (
-        <Typography className="title">No routes available</Typography>
-      )}
-    </>
-  );
+const reqOptions = {
+  method: "GET",
+  headers: {
+    "x-rapidapi-key": `${process.env.REACT_APP_API_KEY}`,
+    "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+    useQueryString: true,
+  },
 };
 
 const BlueSwitch = withStyles({
@@ -50,15 +45,6 @@ const Main = () => {
     let fullDate = `${yyyy}-${mm}-${dd}`;
     return fullDate;
   };
-  const reqOptions = {
-    method: "GET",
-    headers: {
-      "x-rapidapi-key": `${process.env.REACT_APP_API_KEY}`,
-      "x-rapidapi-host":
-        "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-      useQueryString: true,
-    },
-  };
   const [origin, setOrigin] = useState([]);
   const [destination, setDestination] = useState([]);
   const [airportOrigin, setAirportOrigin] = useState("");
@@ -73,6 +59,7 @@ const Main = () => {
   const [destDate, setDestDate] = useState(new Date());
   const [routeResponse, setRouteResponse] = useState({});
   const [areRoutes, setAreRoutes] = useState(true);
+  const [sortOption, setSortOption] = useState("lowest");
 
   useEffect(() => {
     const fetchCurrencies = async () => {
@@ -130,10 +117,9 @@ const Main = () => {
       reqOptions
     );
     response = await response.json();
-    console.log(response);
     setRouteResponse(response);
+    console.log(response);
     setShowRoutes(true);
-    console.log(response.Quotes.length);
     if (response.Quotes.length < 1) {
       setAreRoutes(false);
     } else {
@@ -226,7 +212,7 @@ const Main = () => {
             ></DatePicker>
           </div>
           {slider ? (
-            <div>
+            <div style={{ paddingRight: "15px" }}>
               <label>Inbound Date: </label>
               <DatePicker
                 value={destDate}
@@ -236,11 +222,27 @@ const Main = () => {
           ) : (
             <></>
           )}
+          <div style={{ width: "150px" }}>
+            <Select
+              options={[
+                { value: "lowest", label: "Lowest" },
+                { value: "highest", label: "Highest" },
+              ]}
+              onChange={setSortOption}
+              isSearchable={false}
+              defaultValue={sortOption}
+              placeholder="Sort Prices"
+            ></Select>
+          </div>
           <Button onClick={handleOnClick}>Find Flight</Button>
         </div>
         <br />
         {showRoutes ? (
-          <Info route={routeResponse} areRoutes={areRoutes}></Info>
+          <Info
+            route={routeResponse}
+            areRoutes={areRoutes}
+            sortOption={sortOption}
+          ></Info>
         ) : (
           <></>
         )}

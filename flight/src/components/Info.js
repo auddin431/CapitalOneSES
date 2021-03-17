@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React from "react";
 import "./Info.css";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -61,36 +60,7 @@ const carrierFinder = (arr, id) => {
   return null;
 };
 
-// const StyledAirport = styled.div`
-//   background: ${(props) => (props.isClicked ? "aqua" : "white")};
-// `;
-
-// const Airport = (props) => {
-//   const [isClicked, setIsClicked] = useState(false);
-//   const [originId, setOriginId] = useState("");
-//   const [destinationId, setDestinationId] = useState("");
-//   const outboundpartialdate = "2021-09-01";
-//   const inboundpartialdate = "2021-10-01";
-//   const handleOnClick = () => {
-//     setIsClicked(!isClicked);
-//     if (props.type === "origin") {
-//       setOriginId(props.PlaceId);
-//     } else {
-//       setDestinationId(props.PlaceId);
-//     }
-//     console.log(originId);
-//     console.log(destinationId);
-//   };
-//   return (
-//     <StyledAirport onClick={handleOnClick} isClicked={isClicked}>
-//       <p>{props.PlaceId}</p>
-//       <p>{props.PlaceName}</p>
-//       <p>{props.CountryName}</p>
-//     </StyledAirport>
-//   );
-// };
-
-const Info = (props) => {
+const InfoWrapper = (props) => {
   return (
     <>
       {props.areRoutes ? (
@@ -148,16 +118,17 @@ const Info = (props) => {
 
           return (
             <OutlinedCard
-              originName={originName} //
-              destinationName={destinationName} //
-              carrierOutbound={carrierOutbound} //
+              key={quote.QuoteId}
+              originName={originName}
+              destinationName={destinationName}
+              carrierOutbound={carrierOutbound}
               carrierInbound={carrierInbound}
-              departureOutboundDate={departureOutboundDate} //
-              departureInboundDate={departureInboundDate} //
-              nonStop={quote.Direct} //
-              currencySymbol={props.route.Currencies[0].Symbol} //
-              price={quote.MinPrice} //
-              className={quote.QuoteId === 1 ? "mini" : ""} //
+              departureOutboundDate={departureOutboundDate}
+              departureInboundDate={departureInboundDate}
+              nonStop={quote.Direct}
+              currencySymbol={props.route.Currencies[0].Symbol}
+              price={quote.MinPrice}
+              className={quote.QuoteId === 1 ? "mini" : ""}
             />
           );
         })
@@ -168,30 +139,12 @@ const Info = (props) => {
   );
 };
 
+const Info = (props) => {
+  let copyResponse = { ...props.route };
+  if (props.sortOption.value === "highest") {
+    copyResponse.Quotes = props.route.Quotes.slice(0).reverse();
+  }
+  return <InfoWrapper areRoutes={props.areRoutes} route={copyResponse} />;
+};
+
 export default Info;
-
-/* 
-{
-    routeResponse.Carriers
-    routeResponse.Currencies[0].Symbol
-    routeResponse.Places
-    routeResponse.Quotes
-
-}
-*/
-
-{
-  /* <div>
-      {props.places.map((place, index) => {
-        return (
-          <Airport
-            PlaceId={place.PlaceId}
-            PlaceName={place.PlaceName}
-            CountryName={place.CountryName}
-            type={place.type}
-          />
-        );
-      })}
-      <button>Submit</button>
-</div> */
-}
