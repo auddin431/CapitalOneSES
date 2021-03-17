@@ -11,15 +11,15 @@ const OutlinedCard = (props) => {
       <Card className="root" variant="outlined">
         <CardContent className={props.className}>
           <Typography className="title" gutterBottom>
-            {`${props.originName} to ${props.destinationName}`}
-          </Typography>
-          <Typography variant="h5" component="h2">
             {props.carrierOutbound}{" "}
             {props.carrierInbound === "" ? (
               <></>
             ) : (
               ` -- ${props.carrierInbound}`
             )}
+          </Typography>
+          <Typography variant="h5" component="h2">
+            {`${props.originName} to ${props.destinationName}`}
           </Typography>
           <Typography className="pos">
             {`Departure Date: ${props.departureOutboundDate}`}{" "}
@@ -118,12 +118,12 @@ const Info = (props) => {
         if (props.route.Places[originIndex].Type !== "Station") {
           originName = props.route.Places[originIndex].Name;
         } else {
-          originName = props.route.Places[originIndex].CityName;
+          originName = `${props.route.Places[originIndex].CityName} (${props.route.Places[originIndex].IataCode})`;
         }
         if (props.route.Places[destinationIndex].Type !== "Station") {
           destinationName = props.route.Places[destinationIndex].Name;
         } else {
-          destinationName = props.route.Places[destinationIndex].CityName;
+          destinationName = `${props.route.Places[destinationIndex].CityName} (${props.route.Places[destinationIndex].IataCode})`;
         }
         if (quote.hasOwnProperty("InboundLeg")) {
           departureInboundDate = quote.InboundLeg.DepartureDate.slice(0, 10);

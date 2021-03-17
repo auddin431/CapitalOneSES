@@ -149,63 +149,84 @@ const Main = () => {
 
   return (
     <>
-      <div className="container">
-        <Select
-          options={origin}
-          onInputChange={handleChangeOrigin}
-          onChange={(inputValue) => setAirportOrigin(inputValue.value)}
-          isSearchable={true}
-          className="item"
-          placeholder="Origin"
-        >
-          Origin
-        </Select>
-        <Select
-          options={destination}
-          onInputChange={handleChangeDestination}
-          onChange={(inputValue) => setAirportDestination(inputValue.value)}
-          isSearchable={true}
-          className="item"
-          placeholder="Destination"
-        >
-          Destination
-        </Select>
-        <Select
-          options={currencies}
-          onChange={(inputValue) => setCurrency(inputValue.value)}
-          isSearchable={true}
-          defaultValue={currency}
-          className="item"
-          placeholder="Currency"
-        ></Select>
+      <div className="main">
+        <div className="container1">
+          <div style={{ width: "300px" }}>
+            <Select
+              options={origin}
+              onInputChange={handleChangeOrigin}
+              onChange={(inputValue) => setAirportOrigin(inputValue.value)}
+              isSearchable={true}
+              //className="item"
+              placeholder="Origin"
+            >
+              Origin
+            </Select>
+          </div>
+          <div style={{ width: "300px" }}>
+            <Select
+              options={destination}
+              onInputChange={handleChangeDestination}
+              onChange={(inputValue) => setAirportDestination(inputValue.value)}
+              isSearchable={true}
+              //className="item"
+              placeholder="Destination"
+            >
+              Destination
+            </Select>
+          </div>
+          <div style={{ width: "150px" }}>
+            <Select
+              options={currencies}
+              onChange={(inputValue) => setCurrency(inputValue.value)}
+              isSearchable={true}
+              defaultValue={currency}
+              //className="item"
+              placeholder="Currency"
+            ></Select>
+          </div>
+          <div>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={slider}
+                  onChange={handleSlider}
+                  name="slider"
+                />
+              }
+              label="Round Trip?"
+            />
+          </div>
+        </div>
+        <br />
+        <div className="container2">
+          <div style={{ paddingRight: "15px" }}>
+            <label>Outbound Date: </label>
+            <DatePicker
+              onChange={handleOriginDateChange}
+              value={originDate}
+            ></DatePicker>
+          </div>
+          {slider ? (
+            <div>
+              <label>Inbound Date: </label>
+              <DatePicker
+                value={destDate}
+                onChange={handleDestDateChange}
+              ></DatePicker>
+            </div>
+          ) : (
+            <></>
+          )}
+          <Button onClick={handleOnClick}>Find Flight</Button>
+        </div>
+        <br />
+        {showRoutes ? <Info route={routeResponse}></Info> : <></>}
       </div>
-      <br />
-      <div className="container">
-        <DatePicker
-          onChange={handleOriginDateChange}
-          value={originDate}
-        ></DatePicker>
-        <FormControlLabel
-          control={
-            <Switch checked={slider} onChange={handleSlider} name="slider" />
-          }
-          label="Round Trip?"
-        />
-        {slider ? (
-          <DatePicker
-            value={destDate}
-            onChange={handleDestDateChange}
-          ></DatePicker>
-        ) : (
-          <></>
-        )}
-        <Button onClick={handleOnClick}>Find Flight</Button>
-      </div>
-      {showRoutes ? <Info route={routeResponse}></Info> : <></>}
     </>
   );
 };
-//
+// container div on lines 152&187, 189&215
 
 export default Main;
 

@@ -1,11 +1,25 @@
-.container {
+.container1 {
   display: flex;
   justify-content: space-evenly;
+}
+
+.main {
+  padding: 20px;
+}
+
+.container2 {
+  display: flex;
+  justify-content: center;
 }
 
 .item {
   flex-grow: 1;
 }
+
+.push {
+  margin-left: auto;
+}
+
 .curr {
   flex-shrink: 1;
 }
