@@ -5,7 +5,36 @@ import DatePicker from "react-date-picker";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { withStyles } from "@material-ui/core/styles";
 import "./Main.css";
+
+const RouteAvailability = (props) => {
+  console.log("I am rendered");
+  return (
+    <>
+      {props.areRoutes ? (
+        <></>
+      ) : (
+        <Typography className="title">No routes available</Typography>
+      )}
+    </>
+  );
+};
+
+const BlueSwitch = withStyles({
+  switchBase: {
+    color: "white",
+    "&$checked": {
+      color: "#013d5b",
+    },
+    "&$checked + $track": {
+      backgroundColor: "#013d5b",
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 const Main = () => {
   const dateToString = (date) => {
@@ -32,21 +61,18 @@ const Main = () => {
   };
   const [origin, setOrigin] = useState([]);
   const [destination, setDestination] = useState([]);
-  const [routes, setRoutes] = useState([]);
-  const [queryOrigin, setQueryOrigin] = useState("");
-  const [queryDestination, setQueryDestination] = useState("");
   const [airportOrigin, setAirportOrigin] = useState("");
   const [airportDestination, setAirportDestination] = useState("");
   const [currency, setCurrency] = useState("USD");
   const [currencies, setCurrencies] = useState([]);
   const [showRoutes, setShowRoutes] = useState(false);
-  const [showDestinations, setShowDestinations] = useState(false);
   const [originDate, setOriginDate] = useState(new Date());
   const [obpDate, setObpDate] = useState(dateToString(new Date()));
   const [ibpDate, setIbpDate] = useState("");
   const [slider, setSlider] = useState(false);
   const [destDate, setDestDate] = useState(new Date());
   const [routeResponse, setRouteResponse] = useState({});
+  const [areRoutes, setAreRoutes] = useState(true);
 
   useEffect(() => {
     const fetchCurrencies = async () => {
@@ -66,7 +92,6 @@ const Main = () => {
   const handleChangeOrigin = (inputValue) => {
     const fetchOrigin = async () => {
       if (inputValue !== "") {
-        setQueryOrigin(inputValue);
         let response = await fetch(
           `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/${currency}/en-US/?` +
             new URLSearchParams({ query: inputValue }),
@@ -84,7 +109,6 @@ const Main = () => {
   const handleChangeDestination = (inputValue) => {
     const fetchDestination = async () => {
       if (inputValue !== "") {
-        setQueryDestination(inputValue);
         let response = await fetch(
           `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/${currency}/en-US/?` +
             new URLSearchParams({ query: inputValue }),
@@ -109,6 +133,12 @@ const Main = () => {
     console.log(response);
     setRouteResponse(response);
     setShowRoutes(true);
+    console.log(response.Quotes.length);
+    if (response.Quotes.length < 1) {
+      setAreRoutes(false);
+    } else {
+      setAreRoutes(true);
+    }
   };
 
   const handleOriginDateChange = (returnValue) => {
@@ -138,15 +168,6 @@ const Main = () => {
     }
   };
 
-  // const handleTest = async () => {
-  //   let response = await fetch(
-  //     "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsedates/v1.0/US/USD/en-US/AMS-sky/LAX-sky/anytime/anytime",
-  //     reqOptions
-  //   );
-  //   response = await response.json();
-  //   console.log(response);
-  // };
-
   return (
     <>
       <div className="main">
@@ -157,7 +178,6 @@ const Main = () => {
               onInputChange={handleChangeOrigin}
               onChange={(inputValue) => setAirportOrigin(inputValue.value)}
               isSearchable={true}
-              //className="item"
               placeholder="Origin"
             >
               Origin
@@ -169,7 +189,6 @@ const Main = () => {
               onInputChange={handleChangeDestination}
               onChange={(inputValue) => setAirportDestination(inputValue.value)}
               isSearchable={true}
-              //className="item"
               placeholder="Destination"
             >
               Destination
@@ -181,14 +200,13 @@ const Main = () => {
               onChange={(inputValue) => setCurrency(inputValue.value)}
               isSearchable={true}
               defaultValue={currency}
-              //className="item"
               placeholder="Currency"
             ></Select>
           </div>
           <div>
             <FormControlLabel
               control={
-                <Switch
+                <BlueSwitch
                   checked={slider}
                   onChange={handleSlider}
                   name="slider"
@@ -221,108 +239,14 @@ const Main = () => {
           <Button onClick={handleOnClick}>Find Flight</Button>
         </div>
         <br />
-        {showRoutes ? <Info route={routeResponse}></Info> : <></>}
+        {showRoutes ? (
+          <Info route={routeResponse} areRoutes={areRoutes}></Info>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );
 };
-// container div on lines 152&187, 189&215
 
 export default Main;
-
-// {
-//   showDestinations ? (
-//     destination.map((place, index) => (
-//       <p key={index}>
-//         {place.PlaceName} {}
-//       </p>
-//     ))
-//   ) : (
-//     <></>
-//   );
-// }
-
-// {
-//   showOrigins ? (
-//     origin.map((place, index) => (
-//       <p key={index}>
-//         {place.PlaceName} {}
-//       </p>
-//     ))
-//   ) : (
-//     <></>
-//   );
-//  <button onClick={handleTest}>Test Endpoint</button> }
-
-/* <form onSubmit={handleSubmit}>
-  <label htmlFor="originInput">Leaving From</label>
-  <input
-    id="originInput"
-    value={queryOrigin}
-    onChange={handleChangeOrigin}
-    required
-  />
-  <label htmlFor="destinationInput">Arriving To</label>
-  <input
-    id="originInput"
-    value={queryDestination}
-    onChange={handleChangeDestination}
-    required
-  />
-  <label htmlFor="currencyInput">Currency</label>
-  <input
-    id="currencyInput"
-    value={currency}
-    onChange={handleChangeCurrency}
-    required
-  />
-  <button className="search">Submit</button>
-</form>;
-{
-  showOrigins ? <Info type="origin" places={origin}></Info> : <></>;
-}
-<br />;
-{
-  showDestinations ? (
-    <Info type="destination" places={destination}></Info>
-  ) : (
-    <></>
-  );
-} */
-
-// const handleSubmit = (e) => {
-//   e.preventDefault();
-//   const fetchPlaces = async () => {
-//     const reqOptions = {
-//       method: "GET",
-//       headers: {
-//         "x-rapidapi-key": `${process.env.REACT_APP_API_KEY}`,
-//         "x-rapidapi-host":
-//           "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-//         useQueryString: true,
-//       },
-//     };
-//     let responseOrigin = await fetch(
-//       "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/USD/en-US/?" +
-//         new URLSearchParams({ query: queryOrigin }),
-//       reqOptions
-//     );
-//     let responseDestination = await fetch(
-//       "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/USD/en-US/?" +
-//         new URLSearchParams({ query: queryDestination }),
-//       reqOptions
-//     );
-//     responseOrigin = await responseOrigin.json();
-//     console.log(responseOrigin);
-//     setOrigin(responseOrigin.Places);
-//     responseDestination = await responseDestination.json();
-//     setDestination(responseDestination.Places);
-//   };
-
-//   fetchPlaces();
-//   setShowOrigins(true);
-//   setShowDestinations(true);
-//   setQueryOrigin("");
-//   setQueryDestination("");
-//   setCurrency("");
-// };

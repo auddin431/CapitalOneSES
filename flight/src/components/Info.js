@@ -93,73 +93,77 @@ const carrierFinder = (arr, id) => {
 const Info = (props) => {
   return (
     <>
-      {props.route.Quotes.map((quote) => {
-        let departureOutboundDate = quote.OutboundLeg.DepartureDate.slice(
-          0,
-          10
-        );
-        let originId = quote.OutboundLeg.OriginId;
-        let carrierOutboundId = quote.OutboundLeg.CarrierIds[0];
-        let destinationId = quote.OutboundLeg.DestinationId;
-        let originIndex = placeFinder(props.route.Places, originId);
-        let destinationIndex = placeFinder(props.route.Places, destinationId);
-        let carrierOutboundIndex = carrierFinder(
-          props.route.Carriers,
-          carrierOutboundId
-        );
-        let carrierOutbound = props.route.Carriers[carrierOutboundIndex].Name;
-        let carrierInboundId;
-        let carrierInboundIndex;
-        let carrierInbound;
-        let departureInboundDate;
-        let originName;
-        let destinationName;
-
-        if (props.route.Places[originIndex].Type !== "Station") {
-          originName = props.route.Places[originIndex].Name;
-        } else {
-          originName = `${props.route.Places[originIndex].CityName} (${props.route.Places[originIndex].IataCode})`;
-        }
-        if (props.route.Places[destinationIndex].Type !== "Station") {
-          destinationName = props.route.Places[destinationIndex].Name;
-        } else {
-          destinationName = `${props.route.Places[destinationIndex].CityName} (${props.route.Places[destinationIndex].IataCode})`;
-        }
-        if (quote.hasOwnProperty("InboundLeg")) {
-          departureInboundDate = quote.InboundLeg.DepartureDate.slice(0, 10);
-          carrierInboundId = quote.InboundLeg.CarrierIds[0];
-        } else {
-          departureInboundDate = "";
-          carrierInboundId = null;
-        }
-        if (carrierInboundId) {
-          carrierInboundIndex = carrierFinder(
-            props.route.Carriers,
-            carrierInboundId
+      {props.areRoutes ? (
+        props.route.Quotes.map((quote) => {
+          let departureOutboundDate = quote.OutboundLeg.DepartureDate.slice(
+            0,
+            10
           );
-          carrierInbound = props.route.Carriers[carrierInboundIndex].Name;
-          if (carrierInbound === carrierOutbound) {
+          let originId = quote.OutboundLeg.OriginId;
+          let carrierOutboundId = quote.OutboundLeg.CarrierIds[0];
+          let destinationId = quote.OutboundLeg.DestinationId;
+          let originIndex = placeFinder(props.route.Places, originId);
+          let destinationIndex = placeFinder(props.route.Places, destinationId);
+          let carrierOutboundIndex = carrierFinder(
+            props.route.Carriers,
+            carrierOutboundId
+          );
+          let carrierOutbound = props.route.Carriers[carrierOutboundIndex].Name;
+          let carrierInboundId;
+          let carrierInboundIndex;
+          let carrierInbound;
+          let departureInboundDate;
+          let originName;
+          let destinationName;
+
+          if (props.route.Places[originIndex].Type !== "Station") {
+            originName = props.route.Places[originIndex].Name;
+          } else {
+            originName = `${props.route.Places[originIndex].CityName} (${props.route.Places[originIndex].IataCode})`;
+          }
+          if (props.route.Places[destinationIndex].Type !== "Station") {
+            destinationName = props.route.Places[destinationIndex].Name;
+          } else {
+            destinationName = `${props.route.Places[destinationIndex].CityName} (${props.route.Places[destinationIndex].IataCode})`;
+          }
+          if (quote.hasOwnProperty("InboundLeg")) {
+            departureInboundDate = quote.InboundLeg.DepartureDate.slice(0, 10);
+            carrierInboundId = quote.InboundLeg.CarrierIds[0];
+          } else {
+            departureInboundDate = "";
+            carrierInboundId = null;
+          }
+          if (carrierInboundId) {
+            carrierInboundIndex = carrierFinder(
+              props.route.Carriers,
+              carrierInboundId
+            );
+            carrierInbound = props.route.Carriers[carrierInboundIndex].Name;
+            if (carrierInbound === carrierOutbound) {
+              carrierInbound = "";
+            }
+          } else {
             carrierInbound = "";
           }
-        } else {
-          carrierInbound = "";
-        }
 
-        return (
-          <OutlinedCard
-            originName={originName} //
-            destinationName={destinationName} //
-            carrierOutbound={carrierOutbound} //
-            carrierInbound={carrierInbound}
-            departureOutboundDate={departureOutboundDate} //
-            departureInboundDate={departureInboundDate} //
-            nonStop={quote.Direct} //
-            currencySymbol={props.route.Currencies[0].Symbol} //
-            price={quote.MinPrice} //
-            className={quote.QuoteId === 1 ? "mini" : ""} //
-          />
-        );
-      })}
+          return (
+            <OutlinedCard
+              originName={originName} //
+              destinationName={destinationName} //
+              carrierOutbound={carrierOutbound} //
+              carrierInbound={carrierInbound}
+              departureOutboundDate={departureOutboundDate} //
+              departureInboundDate={departureInboundDate} //
+              nonStop={quote.Direct} //
+              currencySymbol={props.route.Currencies[0].Symbol} //
+              price={quote.MinPrice} //
+              className={quote.QuoteId === 1 ? "mini" : ""} //
+            />
+          );
+        })
+      ) : (
+        <Typography variant="h5">No Routes Available</Typography>
+      )}
     </>
   );
 };
