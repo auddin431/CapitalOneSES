@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/CapitalOneSES/static/css/main.bf30d716.chunk.css",
+    "main.js": "/CapitalOneSES/static/js/main.d1d52194.chunk.js",
+    "main.js.map": "/CapitalOneSES/static/js/main.d1d52194.chunk.js.map",
+    "runtime-main.js": "/CapitalOneSES/static/js/runtime-main.c3c18053.js",
+    "runtime-main.js.map": "/CapitalOneSES/static/js/runtime-main.c3c18053.js.map",
+    "static/css/2.4c78f058.chunk.css": "/CapitalOneSES/static/css/2.4c78f058.chunk.css",
+    "static/js/2.666b85a0.chunk.js": "/CapitalOneSES/static/js/2.666b85a0.chunk.js",
+    "static/js/2.666b85a0.chunk.js.map": "/CapitalOneSES/static/js/2.666b85a0.chunk.js.map",
+    "index.html": "/CapitalOneSES/index.html",
+    "static/css/2.4c78f058.chunk.css.map": "/CapitalOneSES/static/css/2.4c78f058.chunk.css.map",
+    "static/css/main.bf30d716.chunk.css.map": "/CapitalOneSES/static/css/main.bf30d716.chunk.css.map",
+    "static/js/2.666b85a0.chunk.js.LICENSE.txt": "/CapitalOneSES/static/js/2.666b85a0.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c3c18053.js",
+    "static/css/2.4c78f058.chunk.css",
+    "static/js/2.666b85a0.chunk.js",
+    "static/css/main.bf30d716.chunk.css",
+    "static/js/main.d1d52194.chunk.js"
+  ]
+}
