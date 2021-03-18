@@ -1,6 +1,6 @@
 .container1 {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
@@ -20,6 +20,20 @@
 
 .switch {
   margin: 5px;
+}
+
+@media (max-width: 520px) {
+  .container1 {
+    flex-direction: column;
+    align-content: center;
+  }
+  .dropdownPlace {
+    width: 80vw;
+  }
+  .container2 {
+    flex-direction: column;
+    align-content: center;
+  }
 }
 
 .main {
