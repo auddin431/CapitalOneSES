@@ -1,6 +1,25 @@
 .container1 {
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.dropdownPlace {
+  width: 300px;
+  margin: 5px;
+}
+
+.dropdownSecondary {
+  width: 150px;
+  margin: 5px;
+}
+
+.datePicker {
+  margin: 5px;
+}
+
+.switch {
+  margin: 5px;
 }
 
 .main {
@@ -11,6 +30,7 @@
 .container2 {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .item {

@@ -31,6 +31,16 @@ const BlueSwitch = withStyles({
   track: {},
 })(Switch);
 
+const BlueButton = withStyles((theme) => ({
+  root: {
+    color: "white",
+    backgroundColor: "#013d5b",
+    "&:hover": {
+      backgroundColor: "#002a40",
+    },
+  },
+}))(Button);
+
 const Main = () => {
   const dateToString = (date) => {
     let yyyy = date.getFullYear();
@@ -132,9 +142,9 @@ const Main = () => {
           reqOptions
         );
         response = await response.json();
-        console.log(response);
+        //console.log(response);
         if (response.message) {
-          console.log("Burgertown");
+          //console.log("Error was received");
           throw new Error("No Response");
         }
         setRouteResponse(response);
@@ -147,7 +157,7 @@ const Main = () => {
       } catch (error) {
         console.log(error);
         setAreRoutes(false);
-        setShowRoutes(false);
+        setShowRoutes(true);
       }
     };
     fetchRoute();
@@ -184,7 +194,7 @@ const Main = () => {
     <>
       <div className="main">
         <div className="container1">
-          <div style={{ width: "300px" }}>
+          <div className="dropdownPlace">
             <Select
               options={origin}
               onInputChange={handleChangeOrigin}
@@ -195,7 +205,7 @@ const Main = () => {
               Origin
             </Select>
           </div>
-          <div style={{ width: "300px" }}>
+          <div className="dropdownPlace">
             <Select
               options={destination}
               onInputChange={handleChangeDestination}
@@ -206,16 +216,28 @@ const Main = () => {
               Destination
             </Select>
           </div>
-          <div style={{ width: "150px" }}>
-            <Select
-              options={currencies}
-              onChange={(inputValue) => setCurrency(inputValue.value)}
-              isSearchable={true}
-              defaultValue={currency}
-              placeholder="Currency"
-            ></Select>
+          <div className="datePicker">
+            <label style={{ width: "50px" }}>Outbound Date: </label>
+            <DatePicker
+              onChange={handleOriginDateChange}
+              value={originDate}
+            ></DatePicker>
           </div>
-          <div>
+          {slider ? (
+            <div className="datePicker">
+              <label style={{ width: "50px" }}>Inbound Date: </label>
+              <DatePicker
+                value={destDate}
+                onChange={handleDestDateChange}
+              ></DatePicker>
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+        <br />
+        <div className="container2">
+          <div className="switch">
             <FormControlLabel
               control={
                 <BlueSwitch
@@ -227,28 +249,16 @@ const Main = () => {
               label="Round Trip?"
             />
           </div>
-        </div>
-        <br />
-        <div className="container2">
-          <div style={{ paddingRight: "15px" }}>
-            <label>Outbound Date: </label>
-            <DatePicker
-              onChange={handleOriginDateChange}
-              value={originDate}
-            ></DatePicker>
+          <div className="dropdownSecondary">
+            <Select
+              options={currencies}
+              onChange={(inputValue) => setCurrency(inputValue.value)}
+              isSearchable={true}
+              defaultValue={currency}
+              placeholder="Currency"
+            ></Select>
           </div>
-          {slider ? (
-            <div style={{ paddingRight: "15px" }}>
-              <label>Inbound Date: </label>
-              <DatePicker
-                value={destDate}
-                onChange={handleDestDateChange}
-              ></DatePicker>
-            </div>
-          ) : (
-            <></>
-          )}
-          <div style={{ width: "150px" }}>
+          <div className="dropdownSecondary">
             <Select
               options={[
                 { value: "lowest", label: "Lowest" },
@@ -260,7 +270,15 @@ const Main = () => {
               placeholder="Sort Prices"
             ></Select>
           </div>
-          <Button onClick={handleOnClick}>Find Flight</Button>
+          <div style={{ margin: "5px" }}>
+            <BlueButton
+              color="primary"
+              variant="contained"
+              onClick={handleOnClick}
+            >
+              Find Flight
+            </BlueButton>
+          </div>
         </div>
         <br />
         {showRoutes ? (
