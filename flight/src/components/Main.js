@@ -142,7 +142,7 @@ const Main = () => {
           reqOptions
         );
         response = await response.json();
-        console.log(response);
+        //console.log(response);
         if (response.message) {
           //console.log("Error was received");
           throw new Error("No Response");

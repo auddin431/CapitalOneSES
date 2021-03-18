@@ -21,14 +21,16 @@ const OutlinedCard = (props) => {
             {`${props.originName} to ${props.destinationName}`}
           </Typography>
           <Typography className="pos">
-            {`Departure Date: ${props.departureOutboundDate}`}{" "}
-            {props.departureInboundDate !== "" ? (
-              ` Arrival Date: ${props.departureInboundDate}`
-            ) : (
-              <></>
-            )}{" "}
-            {props.nonStop ? " (Nonstop)" : ""}
+            {`Departure Outbound Date: ${props.departureOutboundDate}`}{" "}
           </Typography>
+          {props.departureInboundDate !== "" ? (
+            <Typography className="pos">
+              {` Departure Inbound Date: ${props.departureInboundDate}`}
+            </Typography>
+          ) : (
+            <></>
+          )}{" "}
+          {props.nonStop ? " (Nonstop)" : ""}
           <Typography variant="body1" component="p">
             {props.currencySymbol + props.price}
           </Typography>
