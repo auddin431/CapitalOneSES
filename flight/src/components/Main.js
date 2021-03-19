@@ -143,9 +143,9 @@ const Main = () => {
         );
         response = await response.json();
         //console.log(response);
-        if (response.message) {
+        if (response.message || response.errors) {
           //console.log("Error was received");
-          throw new Error("No Response");
+          throw new Error("No Proper Response");
         }
         setRouteResponse(response);
         setShowRoutes(true);
@@ -221,6 +221,7 @@ const Main = () => {
             <DatePicker
               onChange={handleOriginDateChange}
               value={originDate}
+              minDate={new Date()}
             ></DatePicker>
           </div>
           {slider ? (
@@ -229,6 +230,7 @@ const Main = () => {
               <DatePicker
                 value={destDate}
                 onChange={handleDestDateChange}
+                minDate={new Date()}
               ></DatePicker>
             </div>
           ) : (
