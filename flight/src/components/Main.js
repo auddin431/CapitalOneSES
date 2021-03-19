@@ -201,6 +201,7 @@ const Main = () => {
               onChange={(inputValue) => setAirportOrigin(inputValue.value)}
               isSearchable={true}
               placeholder="Origin"
+              filterOption={""}
             >
               Origin
             </Select>
@@ -212,6 +213,7 @@ const Main = () => {
               onChange={(inputValue) => setAirportDestination(inputValue.value)}
               isSearchable={true}
               placeholder="Destination"
+              filterOption={""}
             >
               Destination
             </Select>
