@@ -1,5 +1,7 @@
 {
     "name": "da_value",
-    "value": "bro",
+    "value": {
+        "hello": "world"
+    },
     "from_secret": false
 }
